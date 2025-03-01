@@ -39,4 +39,5 @@ dependencies {
 
     implementation("io.insert-koin:koin-core:3.5.0")
     implementation("io.insert-koin:koin-ktor:3.5.0")
+
 }
