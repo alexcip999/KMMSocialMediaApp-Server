@@ -3,15 +3,14 @@ package com.example.route
 import com.example.model.AuthResponse
 import com.example.model.SignInParams
 import com.example.model.SignUpParams
-import com.example.repository.user.UserRepository
+import com.example.repository.user.AuthRepository
 import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import org.koin.ktor.ext.inject
 import io.ktor.server.response.*
 
 fun Routing.authRouting(
-    repository: UserRepository,
+    repository: AuthRepository,
 ) {
 
     route("/signup") {

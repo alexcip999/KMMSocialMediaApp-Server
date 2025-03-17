@@ -1,4 +1,4 @@
-package com.example.repository.util
+package com.example.util
 
 import io.ktor.http.*
 

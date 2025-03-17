@@ -1,6 +1,6 @@
 package com.example.dao
 
-import com.example.model.UserRow
+import com.example.dao.user.UserTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +13,7 @@ object DataBaseFactory {
     fun init(){
         Database.connect(createHikariDataSource())
         transaction {
-            SchemaUtils.create(UserRow)
+            SchemaUtils.create(UserTable)
         }
     }
 

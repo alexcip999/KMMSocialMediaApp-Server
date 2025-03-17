@@ -6,13 +6,13 @@ import com.example.model.AuthResponseData
 import com.example.model.SignInParams
 import com.example.model.SignUpParams
 import com.example.plugins.generateToken
-import com.example.repository.util.Response
+import com.example.util.Response
 import com.example.security.hashPassword
 import io.ktor.http.*
 
-class UserRepositoryImpl(
+class AuthRepositoryImpl(
     private val userDao: UserDao,
-) : UserRepository {
+) : AuthRepository {
 
     override suspend fun signUp(params: SignUpParams): Response<AuthResponse> {
         return if (userAllreadyExists(params.email)){
