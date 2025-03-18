@@ -1,4 +1,4 @@
-package com.example.repository.user
+package com.example.repository.auth
 
 import com.example.dao.user.UserDao
 import com.example.model.AuthResponse
@@ -67,7 +67,9 @@ class AuthRepositoryImpl(
                             id = user.id,
                             name = user.name,
                             bio = user.bio,
-                            token = generateToken(params.email)
+                            token = generateToken(params.email),
+                            followingCount = user.followingCount,
+                            followersCount = user.followersCount
                         )
                     )
                 )

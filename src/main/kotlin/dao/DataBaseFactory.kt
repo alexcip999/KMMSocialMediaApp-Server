@@ -1,5 +1,6 @@
 package com.example.dao
 
+import com.example.dao.follows.FollowsTable
 import com.example.dao.user.UserTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -13,7 +14,7 @@ object DataBaseFactory {
     fun init(){
         Database.connect(createHikariDataSource())
         transaction {
-            SchemaUtils.create(UserTable)
+            SchemaUtils.create(UserTable, FollowsTable)
         }
     }
 

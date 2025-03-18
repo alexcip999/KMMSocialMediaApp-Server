@@ -41,5 +41,5 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:3.5.0")
 
     implementation("de.mkammerer.snowflake-id:snowflake-id:0.0.2")
-
+    implementation("org.jetbrains.exposed:exposed-java-time:0.60.0")
 }

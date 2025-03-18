@@ -1,4 +1,4 @@
-package com.example.repository.user
+package com.example.repository.auth
 
 import com.example.model.AuthResponse
 import com.example.model.SignInParams
