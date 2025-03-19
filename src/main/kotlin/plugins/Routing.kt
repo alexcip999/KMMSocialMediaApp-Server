@@ -1,6 +1,6 @@
 package com.example.plugins
 
-import com.example.repository.auth.AuthRepository
+import com.example.repository.auth.auth2.AuthRepository
 import com.example.repository.follows.FollowsRepository
 import com.example.route.authRouting
 import com.example.route.followRouting

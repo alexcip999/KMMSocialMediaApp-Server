@@ -7,8 +7,8 @@ import com.example.di.configureDI
 import com.example.plugins.configureRouting
 import com.example.plugins.configureSecurity
 import com.example.plugins.configureSerialization
-import com.example.repository.auth.AuthRepositoryImpl
-import com.example.repository.auth.follows.FollowsRepositoryImpl
+import com.example.repository.auth.auth2.AuthRepositoryImpl
+import com.example.repository.follows.FollowsRepositoryImpl
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*

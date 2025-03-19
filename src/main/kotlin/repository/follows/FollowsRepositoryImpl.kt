@@ -1,4 +1,4 @@
-package com.example.repository.auth.follows
+package com.example.repository.follows
 
 import com.example.dao.follows.FollowsDao
 import com.example.dao.user.UserDao
