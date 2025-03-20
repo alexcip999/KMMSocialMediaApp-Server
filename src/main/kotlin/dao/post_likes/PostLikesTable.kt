@@ -12,5 +12,4 @@ object PostLikesTable : Table(name = "post_likes") {
     val postId = long(name = "post_id").references(ref = PostTable.postId, onDelete = ReferenceOption.CASCADE)
     val userId = long(name = "user_id").references(ref = UserTable.id, onDelete = ReferenceOption.CASCADE)
     val likeDate = datetime(name = "like_date").defaultExpression(defaultValue = CurrentDateTime)
-
 }

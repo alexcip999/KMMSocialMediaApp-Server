@@ -68,7 +68,7 @@ class PostRepositoryImpl(
 
     }
 
-    override suspend fun getPostByUser(
+    override suspend fun getPostsByUser(
         postsOwnerId: Long,
         currentUserId: Long,
         pageNumber: Int,

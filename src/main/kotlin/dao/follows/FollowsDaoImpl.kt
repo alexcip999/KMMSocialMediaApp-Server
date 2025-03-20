@@ -3,10 +3,8 @@ package com.example.dao.follows
 import com.example.dao.DataBaseFactory.dbQuery
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 
 class FollowsDaoImpl : FollowsDao {
     override suspend fun followUser(follower: Long, following: Long): Boolean {
@@ -49,8 +47,9 @@ class FollowsDaoImpl : FollowsDao {
     override suspend fun getAllFollowing(userId: Long): List<Long> {
         return dbQuery {
             FollowsTable
-                .select(FollowsTable.followerId eq  userId)
-                .map { it[FollowsTable.followingId]}
+                .selectAll()
+                .where { FollowsTable.followerId eq userId }
+                .map { it[FollowsTable.followingId] }
         }!!
     }
 

@@ -63,7 +63,8 @@ class PostDaoImpl : PostDao {
                     otherColumn = UserTable.id,
                     joinType = JoinType.INNER
                 )
-                .select (PostTable.postId eq postId )
+                .selectAll()
+                .where { PostTable.postId eq postId }
                 .singleOrNull()
                 ?.let { toPostRow(it) }
         }
@@ -85,7 +86,8 @@ class PostDaoImpl : PostDao {
                 otherColumn = UserTable.id,
                 joinType = JoinType.INNER
             )
-            .select(PostTable.userId inList users)
+            .selectAll()
+            .where { PostTable.userId inList users }
             .orderBy(column = PostTable.createdAt, order = SortOrder.DESC)
             .limit(count = pageSize).offset(start = ((pageNumber - 1) * pageSize).toLong())
             .map { toPostRow(it) }
