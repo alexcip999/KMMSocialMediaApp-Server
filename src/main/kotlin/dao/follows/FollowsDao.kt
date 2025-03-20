@@ -9,5 +9,7 @@ interface FollowsDao {
 
     suspend fun getFollowing(userId: Long, pageNumber: Int, pageSize: Int): List<Long>
 
+    suspend fun getAllFollowing(userId: Long) : List<Long>
+
     suspend fun isAllreadyFollowing(follower: Long, following: Long): Boolean
 }

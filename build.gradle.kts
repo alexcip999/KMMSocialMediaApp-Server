@@ -20,7 +20,8 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.ktor.server.core)
+    //implementation(libs.ktor.server.core)
+    implementation("io.ktor:ktor-server-core:2.3.6")
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.postgresql)
