@@ -15,6 +15,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import com.example.repository.auth.AuthRepositoryImpl
 import com.example.repository.post.PostRepositoryImpl
+import com.example.repository.profile.ProfileRepositoryImpl
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
@@ -29,9 +30,10 @@ fun Application.module() {
     val postDao = PostDaoImpl()
     val postLikeDao = PostLikeDaoImpl()
     val postRepository = PostRepositoryImpl(postDao, followsDao, postLikeDao)
+    val profileRepository = ProfileRepositoryImpl(userDao, followsDao)
     DataBaseFactory.init()
     configureSerialization()
     configureDI()
     configureSecurity()
-    configureRouting(userRepository, followRepository, postRepository)
+    configureRouting(userRepository, followRepository, postRepository, profileRepository)
 }
