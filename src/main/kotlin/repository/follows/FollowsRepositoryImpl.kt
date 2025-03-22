@@ -2,8 +2,12 @@ package com.example.repository.follows
 
 import com.example.dao.follows.FollowsDao
 import com.example.dao.user.UserDao
+import com.example.dao.user.UserRow
 import com.example.model.FollowAndUnfollowResponse
+import com.example.model.FollowUserData
+import com.example.model.GetFollowsResponse
 import com.example.repository.follows.FollowsRepository
+import com.example.util.Constants
 import com.example.util.Response
 import io.ktor.http.*
 
@@ -61,5 +65,58 @@ class FollowsRepositoryImpl(
                 )
             )
         }
+    }
+
+    override suspend fun getFollowers(userId: Long, pageNumber: Int, pageSize: Int): Response<GetFollowsResponse> {
+        val followersIds = followDao.getFollowers(userId, pageNumber, pageSize)
+        val followersRows = userDao.getUsers(ids = followersIds)
+        val followers = followersRows.map { followerRow ->
+            val isFollowing = followDao.isAllreadyFollowing(follower = userId, following = followerRow.id)
+            toFollowUserData(userRow = followerRow, isFollowing = isFollowing)
+        }
+        return Response.Success(
+            data = GetFollowsResponse(success = true, follows = followers)
+        )
+    }
+
+    override suspend fun getFollowing(userId: Long, pageNumber: Int, pageSize: Int): Response<GetFollowsResponse> {
+        val followingIds = followDao.getFollowing(userId, pageNumber, pageSize)
+        val followingRows = userDao.getUsers(ids = followingIds)
+        val following = followingRows.map { followingRow ->
+            toFollowUserData(userRow = followingRow, isFollowing = true)
+        }
+        return Response.Success(
+            data = GetFollowsResponse(success = true, follows = following)
+        )
+    }
+
+    override suspend fun getFollowingSuggestions(userId: Long): Response<GetFollowsResponse> {
+        val hasFollowing = followDao.getFollowing(userId = userId, pageNumber = 0, pageSize = 1).isNotEmpty()
+        return if (hasFollowing){
+            Response.Error(
+                code = HttpStatusCode.Forbidden,
+                data = GetFollowsResponse(success = false, message = "User has following")
+            )
+        } else {
+            val suggestedFollowingRows = userDao.getPopularUsers(limit = Constants.SUGGESTED_FOLLOWING_LIMIT)
+            val suggestedFollowing = suggestedFollowingRows.filterNot {
+                it.id == userId
+            }.map{
+                toFollowUserData(userRow = it, isFollowing = false)
+            }
+            return Response.Success(
+                data = GetFollowsResponse(success = true, follows = suggestedFollowing)
+            )
+        }
+    }
+
+    private fun toFollowUserData(userRow: UserRow, isFollowing: Boolean): FollowUserData{
+        return FollowUserData(
+            id = userRow.id,
+            name = userRow.name,
+            bio = userRow.bio,
+            imageUrl = userRow.imageUrl,
+            isFollowing = isFollowing
+        )
     }
 }

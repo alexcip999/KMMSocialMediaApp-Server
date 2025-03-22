@@ -2,20 +2,24 @@ package com.example.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.example.dao.user.UserDao
 import com.example.model.AuthResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
+import org.koin.ktor.ext.inject
 
 private const val CLAIM = "email"
-private val jwtAudience = System.getenv("jwtAudience")
-private val jwtDomain = System.getenv("jwt.domain")
-private val jwtSecret = System.getenv("jwt.secret")
+private const val jwtAudience = "users"
+private const val jwtDomain = "http://127.0.0.1"
+private const val jwtSecret = "myjwtsecret"
 
 fun Application.configureSecurity() {
-    // Please read the jwt property from the config file if you are using EngineMain
+
+    val userDao by inject<UserDao>()
+
     authentication {
         jwt {
             verifier(
@@ -27,7 +31,13 @@ fun Application.configureSecurity() {
             )
             validate { credential ->
                 if (credential.payload.getClaim(CLAIM).asString() != null){
-                    JWTPrincipal(credential.payload)
+                    val userExists = userDao.findByEmail(email = credential.payload.getClaim(CLAIM).asString()) != null
+                    val isValidAudiennce = credential.payload.audience.contains(jwtAudience)
+                    if (userExists && isValidAudiennce){
+                        JWTPrincipal(credential.payload)
+                    } else {
+                        null
+                    }
                 } else {
                     null
                 }

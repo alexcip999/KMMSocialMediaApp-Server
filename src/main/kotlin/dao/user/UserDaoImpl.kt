@@ -71,6 +71,24 @@ class UserDaoImpl : UserDao {
         }!!
     }
 
+    override suspend fun getUsers(ids: List<Long>): List<UserRow> {
+        return dbQuery {
+            UserTable
+                .selectAll()
+                .where { UserTable.id inList ids }
+                .map { rowToUser(it) }
+        }!!
+    }
+
+    override suspend fun getPopularUsers(limit: Int): List<UserRow> {
+        return dbQuery {
+            UserTable.selectAll()
+                .orderBy(column = UserTable.followersCount, order = SortOrder.DESC)
+                .limit(count = limit).offset(start = 0L)
+                .map { rowToUser(it)}
+        }!!
+    }
+
 
     private fun rowToUser(row: ResultRow): UserRow {
         return UserRow(
