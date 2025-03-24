@@ -55,11 +55,11 @@ class FollowsDaoImpl : FollowsDao {
         }!!
     }
 
-    override suspend fun isAllreadyFollowing(follower: Long, following: Long): Boolean {
+    override suspend fun isAlreadyFollowing(follower: Long, following: Long): Boolean {
         return dbQuery {
-            val queryResult = FollowsTable.select (
-                (FollowsTable.followerId eq follower) and (FollowsTable.followingId eq following)
-            )
+            val queryResult = FollowsTable
+                .selectAll()
+                .where { (FollowsTable.followerId eq follower) and (FollowsTable.followingId eq following) }
             queryResult.toList().isNotEmpty()
         }!!
     }

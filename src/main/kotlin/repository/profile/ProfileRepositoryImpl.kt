@@ -25,7 +25,7 @@ class ProfileRepositoryImpl(
                 )
             )
         } else {
-            val isFollowing = followsDao.isAllreadyFollowing(follower = currentUserId, following = userId)
+            val isFollowing = followsDao.isAlreadyFollowing(follower = currentUserId, following = userId)
             val isOwnProfile = userId == currentUserId
 
             Response.Success(

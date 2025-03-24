@@ -19,26 +19,36 @@ fun Routing.followRouting(
     authenticate {
 
         route(path = "/follows") {
-            post("/follow") {
-                val params = call.receiveNullable<FollowsParams>()
+            post(path = "/follow") {
+                try {
+                    val params = call.receiveNullable<FollowsParams>()
 
-                if (params == null) {
+                    if (params == null) {
+                        call.respond(
+                            status = HttpStatusCode.BadRequest,
+                            message = FollowAndUnfollowResponse(
+                                success = false,
+                                message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
+                            )
+                        )
+                        return@post
+                    }
+
+                    val result = repository.followUser(follower = params.follower, following = params.following)
+
                     call.respond(
-                        status = HttpStatusCode.BadRequest,
+                        status = result.code,
+                        message = result.data
+                    )
+                } catch (anyError: Throwable) {
+                    call.respond(
+                        status = HttpStatusCode.InternalServerError,
                         message = FollowAndUnfollowResponse(
                             success = false,
-                            message = "Oops, something went wrong, try again!"
+                            message = Constants.UNEXPECTED_ERROR_MESSAGE
                         )
                     )
-                    return@post
                 }
-
-                val result = repository.followUser(follower = params.follower, following = params.following)
-
-                call.respond(
-                    status = result.code,
-                    message = result.data
-                )
             }
 
             post("/unfollow") {

@@ -16,12 +16,12 @@ class FollowsRepositoryImpl(
     private val followDao: FollowsDao
 ) : FollowsRepository {
     override suspend fun followUser(follower: Long, following: Long): Response<FollowAndUnfollowResponse> {
-        return if (followDao.isAllreadyFollowing(follower, following)) {
+        return if(followDao.isAlreadyFollowing(follower, following)){
             Response.Error(
                 code = HttpStatusCode.Forbidden,
                 data = FollowAndUnfollowResponse(
                     success = false,
-                    message = "You are allready following this user!"
+                    message = "You are already following this user"
                 )
             )
         }else{
@@ -30,16 +30,14 @@ class FollowsRepositoryImpl(
             if (success){
                 userDao.updateFollowsCount(follower, following, isFollowing = true)
                 Response.Success(
-                    data = FollowAndUnfollowResponse(
-                        success = true
-                    )
+                    data = FollowAndUnfollowResponse(success = true)
                 )
             }else{
                 Response.Error(
                     code = HttpStatusCode.InternalServerError,
                     data = FollowAndUnfollowResponse(
                         success = false,
-                        message = "Ooops, something went wrong on our side, please try again!"
+                        message = "Oops, something went wrong on our side, please try again!"
                     )
                 )
             }
@@ -71,7 +69,7 @@ class FollowsRepositoryImpl(
         val followersIds = followDao.getFollowers(userId, pageNumber, pageSize)
         val followersRows = userDao.getUsers(ids = followersIds)
         val followers = followersRows.map { followerRow ->
-            val isFollowing = followDao.isAllreadyFollowing(follower = userId, following = followerRow.id)
+            val isFollowing = followDao.isAlreadyFollowing(follower = userId, following = followerRow.id)
             toFollowUserData(userRow = followerRow, isFollowing = isFollowing)
         }
         return Response.Success(
