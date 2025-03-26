@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 
 class PostLikeDaoImpl : PostLikeDao {
     override suspend fun addLike(postId: Long, userId: Long): Boolean {
@@ -30,7 +31,8 @@ class PostLikeDaoImpl : PostLikeDao {
     override suspend fun isPostLikedByUser(postId: Long, userId: Long): Boolean {
         return dbQuery {
             PostLikesTable
-                .select((PostLikesTable.postId eq postId) and (PostLikesTable.userId eq userId))
+                .selectAll()
+                .where { (PostLikesTable.postId eq postId) and (PostLikesTable.userId eq userId)}
                 .toList()
                 .isNotEmpty()
         }!!

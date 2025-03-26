@@ -58,6 +58,7 @@ class PostRepositoryImpl(
             )
         }
 
+        println(posts.toString())
         return Response.Success(
             data = PostsResponse(
                 success = true,

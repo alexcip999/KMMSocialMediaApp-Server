@@ -118,6 +118,7 @@ fun Routing.postRouting(
                         pageSize = limit,
                         pageNumber = page
                     )
+                    call.application.log.error(result.data.toString())
                     call.respond(
                         status = result.code,
                         message = result.data
